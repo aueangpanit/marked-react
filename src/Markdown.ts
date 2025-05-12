@@ -1,5 +1,5 @@
+import { Marked, MarkedOptions, Tokenizer } from 'marked';
 import { createElement, Fragment } from 'react';
-import { Marked, MarkedOptions } from 'marked';
 
 import ReactParser from './ReactParser';
 import ReactRenderer, { ReactRendererOptions } from './ReactRenderer';
@@ -11,6 +11,7 @@ export interface MarkdownProps extends ReactRendererOptions, LexerOptions {
   children?: string;
   isInline?: boolean;
   instance?: Marked;
+  tokenizer?: Tokenizer;
 }
 
 const validateComponentProps = (props: MarkdownProps) => {
@@ -31,6 +32,7 @@ const defaultProps = {
   openLinksInNewTab: true,
   langPrefix: 'language-',
   renderer: undefined,
+  tokenizer: undefined,
 };
 
 const markedInstance = new Marked();
@@ -45,7 +47,7 @@ const Markdown = (props: MarkdownProps) => {
   const lexerOptions = {
     breaks: options.breaks,
     gfm: options.gfm,
-    tokenizer: marked.defaults.tokenizer,
+    tokenizer: options.tokenizer ?? marked.defaults.tokenizer,
   };
 
   // convert input markdown into tokens
